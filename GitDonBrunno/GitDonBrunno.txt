@@ -1,3 +1,4 @@
+git pull --rebase origin main
 git add .
 git commit -m "Atualização do site"
 git push
