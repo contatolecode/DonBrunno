@@ -5,8 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Cardápio – Cantina Don Brunno</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Hanken+Grotesk:wght@400;500;600&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
+<style>
+/* =====================================================================
+   Layout do cardápio (tudo dentro de #dm, para não mexer no resto do site)
+   A fonte do cardápio é a Nunito Sans (simples e fácil de ler).
+   Para trocar, mude só a linha --f abaixo.
+   ===================================================================== */
+#dm{
+  --f:'Nunito Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --bg:#F5EDE3;          /* fundo creme */
+  --green:#1F3A2B;       /* títulos, nomes e preços */
+  --mink:#46463E;        /* ingredientes */
+  --gold:#B08D57;        /* molduras e ornamentos */
+  --gold-soft:rgba(176,141,87,.16);
+  --gold-ink:#6B5426;    /* texto dos campos de foto */
+  background:var(--bg);color:var(--mink);
+  font:400 17px/1.5 var(--f);
+}
+#dm button{font:inherit;color:inherit}
+
+/* ---------- título ---------- */
+#dm .dm-top{text-align:center;padding:4.6rem 20px 26px}
+#dm .dm-top h1{font:800 clamp(36px,6vw,52px)/1.1 var(--f);color:var(--green)}
+#dm .dm-top p{margin-top:8px}
+
+/* ---------- ornamento ---------- */
+#dm .orn{display:block;width:200px;height:14px;margin:12px auto 0}
+#dm .orn path,#dm .orn line{stroke:var(--gold);fill:none;stroke-width:1.1}
+
+/* ---------- abas de categorias (ficam logo abaixo do cabeçalho) ---------- */
+#dm .tabs{position:sticky;top:76px;z-index:30;background:var(--bg);border-bottom:1px solid var(--gold-soft)}
+#dm .tabs ul{display:flex;gap:6px;margin:0 auto;padding:10px 16px;list-style:none;overflow-x:auto;scrollbar-width:none;max-width:1080px}
+#dm .tabs ul::-webkit-scrollbar{display:none}
+#dm .tabs a{display:block;white-space:nowrap;padding:8px 15px;border:1px solid var(--gold);border-radius:999px;color:var(--green);text-decoration:none;font:700 14px/1 var(--f)}
+#dm .tabs a.on,#dm .tabs a:hover{background:var(--green);border-color:var(--green);color:var(--bg)}
+
+/* ---------- seção com moldura dourada ---------- */
+#dm main{max-width:1080px;margin:0 auto;padding:36px 16px 24px}
+#dm .sec{position:relative;border:1px solid var(--gold);margin:0 0 44px;padding:38px clamp(18px,4vw,48px) 46px;scroll-margin-top:140px}
+#dm .sec .c{position:absolute;width:14px;height:14px;background:var(--bg);border:1px solid var(--gold)}
+#dm .sec .c.tl{top:-7px;left:-7px}#dm .sec .c.tr{top:-7px;right:-7px}
+#dm .sec .c.bl{bottom:-7px;left:-7px}#dm .sec .c.br{bottom:-7px;right:-7px}
+#dm .sec>header{text-align:center;margin-bottom:28px}
+#dm .sec h2{font:800 clamp(26px,4vw,36px)/1.15 var(--f);color:var(--green)}
+#dm .tag{display:inline-block;margin-top:12px;padding:4px 14px;border:1px solid var(--gold);border-radius:999px;font:700 13px/1.3 var(--f);color:var(--green)}
+
+/* ---------- subtítulos dentro da seção ---------- */
+#dm .gh{list-style:none}
+#dm .gh h3,#dm .dm-sub,#dm .pick h3{font:800 21px/1.25 var(--f);color:var(--green)}
+#dm .gh h3{margin:22px 0 6px;padding:0 14px}
+#dm .gh:first-child h3{margin-top:0}
+
+/* ---------- seções com foto: lista à esquerda, foto à direita ---------- */
+#dm .grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:40px;align-items:start}
+#dm .its{list-style:none;display:flex;flex-direction:column;gap:2px}
+#dm .dm-it{position:relative;display:block;width:100%;text-align:left;padding:12px 44px 12px 14px;border:0;border-radius:10px;background:transparent;cursor:pointer}
+#dm .dm-it:hover,#dm .dm-it.on{background:var(--gold-soft)}
+#dm .dm-it:focus-visible,#dm .chip:focus-visible,#dm .nav button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+#dm .nm{display:block;font:800 17px/1.3 var(--f);color:var(--green)}
+#dm .nm .sep{margin:0 .4em;font-weight:600;color:var(--gold)}
+#dm .ds{display:block;margin-top:3px;font-size:16px;line-height:1.45;color:var(--mink)}
+#dm .ci{position:absolute;top:14px;right:14px;width:20px;height:20px;stroke:var(--gold-ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.75}
+#dm .dm-it.on .ci{opacity:1}
+
+/* preços com mais de um valor (Taça / Jarra, 1 pessoa / 2 pessoas...) */
+#dm .dm-mp{display:block;margin-top:3px;font:700 16px/1.4 var(--f);color:var(--green)}
+
+/* escolha da massa */
+#dm .pick{margin:0 0 24px;padding:0 14px}
+#dm .pick h3{margin:0 0 4px}
+#dm .pick .note{margin:0 0 12px}
+#dm .chips{display:flex;flex-wrap:wrap;gap:8px}
+#dm .chip{padding:9px 16px;border:1px solid var(--gold);border-radius:999px;background:transparent;cursor:pointer;font:700 15px/1 var(--f);color:var(--green)}
+#dm .chip:hover,#dm .chip.on{background:var(--green);border-color:var(--green);color:var(--bg)}
+#dm .dm-sub{margin:0 0 8px;padding:0 14px}
+
+/* ---------- painel de foto (fica fixo ao rolar) ---------- */
+#dm .panel{position:sticky;top:148px}
+#dm .dmph{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;
+  aspect-ratio:4/3;border:2px dashed var(--gold);border-radius:16px;background:var(--gold-soft);color:var(--gold-ink);padding:16px;overflow:hidden}
+#dm .dmph svg{width:38px;height:38px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#dm .dmph b{font:800 14px/1.2 var(--f);letter-spacing:.08em;text-transform:uppercase}
+#dm .dmph span{font:600 16px/1.25 var(--f)}
+#dm .dmph em{position:absolute;top:12px;right:12px;padding:2px 10px;border-radius:999px;background:var(--gold);color:#fff;font:700 12px/1.6 var(--f);font-style:normal}
+#dm .dmph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+#dm .fade{animation:dmfade .28s ease}
+@keyframes dmfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#dm .cap{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-top:12px}
+#dm .cap strong{font:800 17px/1.3 var(--f);color:var(--green)}
+#dm .cap span{text-align:right;font:800 15px/1.3 var(--f);color:var(--green)}
+#dm .nav{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:10px;font:700 14px/1 var(--f);color:var(--green)}
+#dm .nav button{width:40px;height:40px;border:1px solid var(--gold);border-radius:50%;background:transparent;cursor:pointer;font-size:22px;line-height:1}
+#dm .nav button:hover{background:var(--green);border-color:var(--green);color:var(--bg)}
+#dm .mob{display:none}   /* foto que abre dentro da lista (só celular) */
+
+/* ---------- celular ---------- */
+@media (max-width:980px){
+  #dm .tabs{top:66px}
+  #dm .dm-top{padding-top:5.4rem}
+  #dm .sec{scroll-margin-top:128px}
+}
+@media (max-width:820px){
+  #dm{font-size:16.5px}
+  #dm .sec{padding:32px 14px 34px}
+  #dm .grid{grid-template-columns:1fr}
+  #dm .panel{display:none}
+  #dm .mob{display:block;padding:4px 14px 14px}
+  #dm .mob[hidden]{display:none}
+  #dm .pick,#dm .dm-sub{padding:0 12px}
+}
+@media (prefers-reduced-motion:reduce){#dm .fade{animation:none}}
+</style>
 </head>
 <body class="pg">
 <header id="hd">
@@ -21,21 +132,529 @@
  </div></div>
   <nav id="mm"><span class="ph mlogo" data-s="logo"></span><ul><li><a href="index.html">Início</a></li><li><a href="cardapio.html">Cardápio</a></li><li><a href="index.html#delivery">Delivery</a></li><li><a href="index.html#contato">Onde estamos</a></li><li><a href="https://wa.me/5547996663839" class="sm">WhatsApp</a></li><li><a href="https://www.instagram.com/cantinadonbrunno" class="sm">Instagram</a></li></ul><div class="trib mt"></div></nav>
 </header>
-<section class="cb-cover"><div class="w">
- <i class="cb-orn" aria-hidden="true"></i>
- <h1>Cardápio</h1>
- <p class="cb-slogan">A Cantina mais tradicional de Joinville.</p>
- <p class="cb-lead">As massas clássicas, os risotos, as carnes nobres e as famosas lasanhas compõem o nosso cardápio, junto com uma carta de vinhos cuidadosamente selecionada.</p>
- <p class="cb-hint">Toque numa categoria abaixo para ir direto até ela</p>
-</div></section>
-<nav class="cb-tabs" aria-label="Categorias do cardápio"><ul id="tabs"></ul></nav>
-<main id="menu"></main>
+
+<div id="dm">
+  <div class="dm-top">
+    <h1>Cardápio</h1>
+    <svg class="orn" viewBox="0 0 200 14" aria-hidden="true"><line x1="0" y1="7" x2="80" y2="7"/><line x1="120" y1="7" x2="200" y2="7"/><path d="M80 7C88 0 96 0 100 7C104 14 112 14 120 7C112 0 104 0 100 7C96 14 88 14 80 7Z"/></svg>
+    <p>A Cantina mais tradicional de Joinville.</p>
+  </div>
+  <nav class="tabs" aria-label="Categorias do cardápio"><ul id="tabs"></ul></nav>
+  <main id="menu"></main>
+</div>
+
 <footer class="foot"><div class="w fm"><span class="ph" data-s="logo" role="img" aria-label="Logo Cantina Don Brunno"></span>
  <p>Venha nos conhecer! Na Cantina Don Brunno, a tradição, o sabor e o carinho de uma mesa familiar esperam por você. Seja bem-vindo, e volte sempre.</p><span></span></div>
 <div class="w"><p class="cp">© 2026 Cantina Don Brunno – A Cantina mais tradicional de Joinville – Todos os direitos reservados.</p></div></footer>
+
 <script src="js/img.js"></script>
 <script src="js/main.js"></script>
-<script src="js/data.js"></script>
-<script src="js/cardapio.js"></script>
+<script>
+/* =====================================================================
+   COMO EDITAR
+   1) ITENS: cada linha é "Nome|Ingredientes|Preço".
+        - Preço único:     "98,90"            → aparece R$98,90
+        - Vários preços:   "Jarra 35,00;Copo 14,90"
+        - Subtítulo:       "## Nome do subtítulo"
+        - Ingredientes podem ficar em branco: "Nome||98,90"
+   2) FOTOS: em FOTOS, "Seção|Nome do item": número = quantas fotos o prato
+      terá (mostra o campo destacado). Quando tiver as imagens, troque o
+      número pela lista de arquivos, por exemplo:
+      'Entradas|Hackpeter':['img/pratos/hackepeter-1.jpg','img/pratos/hackepeter-2.jpg']
+   3) Todas as seções (comidas, bebidas e vinhos) usam o mesmo layout: nome à esquerda, foto à direita.
+   ===================================================================== */
+
+const SECOES=[
+ {id:'entradas',t:'Entradas',itens:[
+  "Hackpeter||98,90",
+  "Bolinho de Bacalhau (6 unidades)||79,90",
+  "Camarão Aperitivo Don Brunno|Camarão médio empanados|98,90",
+  "Carpaccio de Carne|Lâminas de carne temperada com azeite de oliva, limão, alcaparras e parmesão|79,90",
+  "Torradas com três patês||58,90",
+  "Cesta de Pães com 3 Patês||58,90",
+  "Filé mignon na chapa||83,00",
+  "Frango à passarinho||79,90",
+  "Calabresa acebolada na chapa||73,90",
+  "Provolone à milanesa||77,90",
+  "Polenta frita|Milho branco|69,90",
+  "Batata frita||62,00",
+  "Aipim frito com bacon||69,90",
+  "Torradas de alho ou Porção de torrada||37,90",
+  "Porção de azeitona||35,90",
+  "Tábua de Frios Don Brunno|5 tipos de queijos (minas, mussarela, parmesão, prato e provolone), salame italiano, uvas, azeitonas, ovos de codorna e palmito|89,90",
+  "Tábua Medieval|3 tipos de queijo (mussarela, prato e provolone), 1 tipo de salame (italiano), azeitonas|83,20",
+  "Tábua à Itália|Salame italiano, queijo branco e azeitonas|71,00",
+  "Porção Florença|Queijo provolone|56,90",
+  "Porção Turim|Queijo parmesão|59,90",
+  "Porção Bolonha|Salame italiano|49,90",
+  "Queijo minas com tomate seco||53,90",
+  "Queijo branco com orégano e azeite de oliva||53,90"]},
+
+ {id:'saladas',t:'Saladas',itens:[
+  "Salada Verde|Alface americana e crespa, agrião, radite, chicória, rúcula e broto de alfafa|53,00",
+  "Salada Mista|Folhas verdes, tomate, cenoura, palmito, ovos de codorna e azeitonas|62,00",
+  "Salada Pesto|Alface americana, crespa e roxa, tomate cereja, palmito, crótons, molho pesto e orégano|65,00",
+  "Salada Brie|Alface americana, rúcula, presunto parma, queijo brie, queijo minas, crótons, tomate cereja, orégano, molho tártaro e molho de mostarda e mel|79,00",
+  "Salada #|Alface americana, rúcula, queijo búfala, queijo minas, tomate seco, crótons, orégano, molho de pepino e limão e salsinha|74,00",
+  "Salada de Camarão|Alface americana e roxa, rúcula, camarão, queijo parmesão, gergelim preto e molho tártaro|84,00",
+  "Salada Páprica|Alface americana, rúcula, queijo minas, crótons, frango, tomate cereja, gergelim preto e molho páprica|74,00",
+  "Molho Extra|Páprica picante, pesto, mostarda com mel, tártaro, e pepino com limão|26,00"]},
+
+ {id:'massas',t:'Massas',tag:'Preço por 1 pessoa',
+  massa:{nota:'Opção: massa verde',opcoes:['Spaguetti','Talharim','Fettuccini']},
+  itens:[
+  "Ao Sugo||93,00",
+  "Molho Bolonhesa||93,00",
+  "Molho Branco||93,00",
+  "Molho Quatro Queijos||98,00",
+  "Alho e Óleo||93,00",
+  "Calabresa Acebolada||93,00",
+  "Molho Frango||93,00",
+  "Mignon Acebolado||97,00",
+  "Molho de Camarão||103,00",
+  "Molho Italiano|Molho branco com tomate seco e azeitona preta|98,00",
+  "Molho Funghi||98,00",
+  "Com Galinha Caipira||93,00",
+  "À Carbonara|Baycon, gema, molho branco|93,00",
+  "À Marguerita|Tomate, cebola e manjericão|93,00",
+  "À Jardineira|Brócolis e cenoura|93,00",
+  "Al Mare|Peixe, camarão e lula|105,00",
+  "Prato Dividido|Talher extra|24,00"]},
+
+ {id:'nhoque',t:'Nhoque Don Brunno',tag:'Preço por 1 pessoa',itens:[
+  "Ao Sugo||98,50",
+  "Molho Bolonhesa||98,50",
+  "Molho Branco||98,50",
+  "Molho Quatro Queijos||98,50",
+  "Alho e Óleo||98,50",
+  "Calabresa Acebolada||98,50",
+  "Molho Frango||98,50",
+  "Mignon Acebolado||98,50",
+  "Molho de Camarão||106,00",
+  "Molho Italiano|Molho branco com tomate seco e azeitona preta|98,50",
+  "Molho Funghi||98,50",
+  "Com Galinha Caipira||98,50",
+  "À Carbonara||98,50",
+  "À Marguerita|Tomate, cebola e manjericão|98,50",
+  "À Jardineira|Brócolis e cenoura|98,50",
+  "Molho La Mare|Camarão, lula, peixe|112,90"]},
+
+ {id:'risoto',t:'Risoto',tag:'Preço por 1 pessoa',itens:[
+  "Risoto de Camarão||112,00",
+  "Risoto de 4 Queijos||104,00",
+  "Risoto ao Funghi||104,00",
+  "Risoto de Mignon||104,00"]},
+
+ {id:'sopas',t:'Sopas, Panquecas e Polenta',tab:'Sopas e Panquecas',itens:[
+  "## Sopas e Cremes",
+  "Capeletti||79,90",
+  "Creme de Aspargo||83,90",
+  "Creme de Palmito||81,90",
+  "Canja||81,90",
+  "## Panquecas",
+  "Frango com Catupiry||79,90",
+  "Carne||79,90",
+  "## Polenta",
+  "Polenta com Galinha Caipira||88,00"]},
+
+ {id:'carnes',t:'Carnes',tag:'Preço por 1 pessoa',itens:[
+  "Filé Mignon à moda da casa|Medalhão de mignon grelhado acompanhando salada (palmito, alface, tomate) e spaguetti|129,90",
+  "Filé Mignon ao Molho Madeira|Medalhão de mignon grelhado com molho madeira. Acompanha arroz, batata palha e salada (palmito, alface, tomate)|129,90",
+  "Filé Mignon ao Creme de Aspargos|Medalhão de mignon grelhado com creme de aspargo. Acompanha spaguetti na manteiga e salada (rúcula e tomate)|129,90",
+  "Filé à Parmegiana|Filé de mignon à milanesa gratinado com queijo e molho ao sugo. Acompanha arroz e fritas ou spaguetti e fritas|129,90",
+  "Filé ao Molho de Pimenta Verde|Medalhão de mignon grelhado com molho de pimenta verde. Acompanha arroz e fritas ou spaguetti e fritas|138,00",
+  "Filé à Chateaubriand|Medalhão de mignon grelhado com molho madeira, aspargo, ervilha, champignon, presunto. Acompanha arroz e fritas|138,00",
+  "Filé Mignon Picante|Medalhão de mignon grelhado com pimenta do reino moída, nata com pão. Acompanha arroz e fritas ou spaguetti e fritas|138,00",
+  "Strogonoff de Filé Mignon|Acompanha arroz e batata palha ou spaguetti|115,00"]},
+
+ {id:'frango',t:'Frango',tag:'Preço por 1 pessoa',itens:[
+  "Frango à Moda da Casa|Peito de frango grelhado. Acompanha salada (palmito, alface, tomate) e spaguetti|94,50",
+  "Frango ao Creme de Tomate Seco|Peito de frango grelhado com creme de tomate seco. Acompanha spaguetti verde|94,50",
+  "Frango ao Creme de Champignons|Peito de frango grelhado com creme de champignons. Acompanha spaguetti na manteiga|94,50",
+  "Frango ao Creme de Champignons com Alho Poró|Peito de frango grelhado com creme de champignon e alho poró. Acompanha spaguetti na manteiga|94,50"]},
+
+ {id:'lasanha',t:'Lasanha',itens:[
+  "Molho Quatro Queijos||1 pessoa 115,00;2 pessoas 186,00",
+  "Molho de Camarão||1 pessoa 127,00;2 pessoas 197,00",
+  "Molho Frango||1 pessoa 115,00;2 pessoas 186,00",
+  "Bolonhesa||1 pessoa 115,00;2 pessoas 186,00",
+  "Sugo||1 pessoa 115,00;2 pessoas 186,00",
+  "Bechamel|Molho branco|1 pessoa 115,00;2 pessoas 186,00"]},
+
+ {id:'mar',t:'Mar',itens:[
+  "## Bacalhau",
+  "Bacalhau à Don Brunno|Bacalhau em posta ao forno com pimentões, cebola e azeitona preta. Acompanha batata dorê|210,00",
+  "## Camarão",
+  "Camarão à Romanesca|Camarão G empanados no queijo parmesão. Acompanha arroz à grega e batata palha|159,90",
+  "Camarão à New Burger|Camarão M com molho rosê e champignon. Acompanha arroz com açafrão e batata palha|138,00",
+  "Camarão Gratinado|Camarão M com molho branco e palmito. Acompanha arroz branco e batata palha|138,00",
+  "## Peixe – Linguado",
+  "Linguado Don Brunno Crocante|Filé de linguado recheado com palmito e queijo. Acompanha arroz à grega e batata palha|126,00",
+  "Linguado|Filé de linguado. Acompanha legumes no vapor (brócolis e cenoura) e batata cozida|126,00",
+  "Linguado com Alcaparras|Filé de linguado com alcaparras no azeite de oliva. Acompanha batata e legumes na manteiga (brócolis e cenoura)|126,00",
+  "Linguado New Burger|Filé de linguado com molho rosê e champignon. Acompanha arroz à grega e batata palha|126,00",
+  "Linguado Gratinado|Filé de linguado com molho branco e palmito. Acompanha arroz branco e batata palha|126,00"]},
+
+ {id:'sobremesas',t:'Sobremesas',itens:[
+  "Petit Gâteau|Sorvete de creme com bolo e cobertura de chocolate|49,90",
+  "Creme de Mamão Papaia|Sorvete de creme ou morango. Sorvete, mamão papaia e licor de cassis, ou sorvete, mamão papaia sem cassis com calda de chocolate|49,90",
+  "Morango Don Brunno|Morango, suspiro, chantilly, sorvete de creme com cobertura de chocolate|65,00",
+  "Morango, Suspiro e Chantilly||59,90",
+  "Morango, Suspiro e Chantilly|Cobertura de chocolate|65,00",
+  "Sorvete com Cobertura de Chocolate||45,90",
+  "Sorvete de Creme|2 bolas|39,90",
+  "Sorvete de Morango|2 bolas|39,90",
+  "Sorvete de Chocolate|2 bolas|39,90",
+  "Sorvete de Abacaxi Francês|2 bolas|39,90",
+  "Café Expresso||7,50"]},
+
+ {id:'extras',t:'Extras',itens:[
+  "Prato Extra|Porção de arroz ou porção de massa e fritas|35,00",
+  "Talher Extra|Prato dividido|29,00"]},
+
+ /* ------------------------- BEBIDAS E VINHOS (só texto) ------------------------- */
+ {id:'refri',t:'Refrigerantes e Água',tab:'Refrigerantes',itens:[
+  "Coca-Cola / Coca-Cola sem açúcar||8,30",
+  "H2OH / Schweppes Citrus||8,30",
+  "Guaraná / Guaraná Zero / Soda||8,30",
+  "Água Tônica / Zero||8,30",
+  "Água Mineral|Com gás / Sem gás|8,30",
+  "Red Bull / Red Bull Tropical||32,00",
+  "Soda Italiana|Maçã verde, Pêssego, Tangerina, Morango e Limão Siciliano|35,90"]},
+
+ {id:'sucos',t:'Sucos',itens:[
+  "Polpa|Acerola, Abacaxi, Morango ou Maracujá|Jarra 35,00;Copo 14,90",
+  "Uva|Integral|Jarra 38,90;Copo 14,90",
+  "Laranja||Jarra 32,90;Copo 13,90",
+  "Sucos com leite condensado||Jarra 39,90;Copo 19,90",
+  "Limonada Suíça||Jarra 32,90;Copo 11,90",
+  "Laranja com Acerola / Laranja com Mamão||Jarra 32,90;Copo 18,90"]},
+
+ {id:'cervejas',t:'Cervejas',itens:[
+  "Heineken|600 ml|20,90",
+  "Brahma|600 ml|16,90",
+  "Original / Serramalte|600 ml|19,90",
+  "Opa Bier Pilsen||17,90",
+  "Opa Bier Tipo Weizen||22,90",
+  "Opa Bier Porter||22,90",
+  "Opa Bier Strong Golden Ale||23,90",
+  "Opa Bier Tipo IPA|Puro malte|22,90",
+  "Opa Bier Tipo Pale Ale|Puro malte|22,90",
+  "Malzbier|Long neck|12,00",
+  "Heineken Zero|Long neck|14,90",
+  "Budweiser / Stella Artois|Long neck|12,90",
+  "Heineken|Long neck|14,90"]},
+
+ {id:'caipirinhas',t:'Caipirinhas',itens:[
+  "Vodka / Bacardi / Steinhaeger / Cachaça / Vinho||37,90",
+  "Vodka Absolut|Importada|48,00",
+  "Caipirinha de Morango||48,00",
+  "Caipirinha de Abacaxi com Hortelã||37,90"]},
+
+ {id:'coqueteis',t:'Coquetéis',itens:[
+  "Alexander|Conhaque, licor de cacau, creme de leite|36,90",
+  "Pinã Colada|Suco de abacaxi, leite de coco, Bacardi, creme de leite|43,90",
+  "Blue Lake|Vodka, suco de limão, curaçau blue, soda|43,90",
+  "Whisky Sauer|Suco de limão, suco de laranja, whisky, açúcar|43,90",
+  "Batida de Coco / Batida de Maracujá||37,90",
+  "Coktail de Frutas sem álcool||43,90",
+  "Negroni|Vermute tinto, Campari e gin|46,90",
+  "Tropical Gin|Red Bull Tropical com gin|46,90"]},
+
+ {id:'destilados',t:'Destilados, Whisky e Licor',tab:'Destilados',itens:[
+  "## Destilados",
+  "Cuba||29,90",
+  "Gyn e Tônica||29,90",
+  "Smirnoff / Bacardi / Bacardi Lemom|Dose|23,00",
+  "Vodka Absolut|Importada · dose|31,00",
+  "Gyn|Dose|23,00",
+  "Steinhaeger|Dose|23,00",
+  "Campari|Dose|27,00",
+  "Undenberg||27,00",
+  "Bartenike Bitter||23,00",
+  "Conhaque Fundador|Importado|38,90",
+  "Jägermeister|Importado|38,90",
+  "Conhaque Domecq|Nacional|25,00",
+  "Martini||25,00",
+  "Aguardente de Cana Ypióca||23,00",
+  "Aguardente de Cana São Francisco|Carvalho|27,00",
+  "Grappa Nonino||62,00",
+  "## Whisky",
+  "Red Label|Johnny Walker (12 anos)|33,90",
+  "Black Label|Johnny Walker (12 anos)|35,90",
+  "Chivas Regal|12 anos|33,90",
+  "Ballentines||33,90",
+  "## Licor",
+  "Lemoncello||42,90",
+  "Cointreau||42,90",
+  "Drambuie||42,90",
+  "Cassis||27,00",
+  "Amarula||42,90",
+  "Frangélico||42,90",
+  "Quarenta e três||42,90"]},
+
+ {id:'vinhos-nac',t:'Vinhos Nacionais',tab:'Vinhos Nacionais',itens:[
+  "## Vinícola Giacomin – Flores da Cunha – RS",
+  "Branco Fino Moscato|Seco ou suave|Taça 19,90;1/2 Jarra 31,90;Jarra 51,90;Garrafa 75,00",
+  "Branco Fino Seco|Riesling|Taça 19,90;1/2 Jarra 31,90;Jarra 51,90",
+  "Rosado|Suave|Taça 19,90;1/2 Jarra 31,90;Jarra 51,90",
+  "Tinto|Seco ou suave|Taça 19,90;1/2 Jarra 31,90;Jarra 51,90;Garrafa 75,00",
+  "Tinto Clássico|Cabernet Sauvignon|Taça 21,90;1/2 Jarra 34,90;Jarra 63,90;Garrafa 82,90",
+  "Tinto|Merlot|Taça 21,90;1/2 Jarra 34,90;Jarra 63,90",
+  "## Giacomin Vinhos Tintos (garrafa)",
+  "Reserva Cabernet Sauvignon||89,90",
+  "Reserva Merlot||89,90",
+  "## Giacomin Vinhos Brancos (garrafa)",
+  "Reserva Moscato Giallo||86,90",
+  "Reserva Branco Riesling||86,90",
+  "## Espumantes Nacionais (garrafa)",
+  "Giacomin|Giallo ou Brut|89,90",
+  "Giacomin|Rose Moscatel ou Rose Brut|89,90",
+  "## Espumantes Importados (garrafa)",
+  "Mural Reserva Brut|Portuguesa|137,00",
+  "Castelfino Rose-Brut|Espanhola|106,00",
+  "Castelfino Demi-Sec / Brut|Espanhola|106,00",
+  "Tenuta Sant'Anna|Pinot Grigio & Brut (Italiana)|186,00",
+  "## Casa Valduga Vinhos Tintos",
+  "Cabernet Sauvignon|Meia garrafa|86,90",
+  "Cabernet Sauvignon||159,90",
+  "Merlot||159,90",
+  "Naturelle Tinto Suave||103,90",
+  "## Casa Valduga Vinhos Brancos",
+  "Chardonay||145,90",
+  "Chardonay|Meia garrafa|82,90",
+  "Naturelle Branco Suave||99,90"]},
+
+ {id:'vinhos-imp',t:'Vinhos Importados',tab:'Vinhos Importados',itens:[
+  "## Português",
+  "Vinho do Porto|Dose|32,90",
+  "Confidencial Reserva Tinto||119,00",
+  "Confidencial Branco||99,00",
+  "Gran Fortíssimo||129,00",
+  "Escapada Vinho Verde||99,00",
+  "Casalinho Branco||92,00",
+  "Solar de Mouras|Alentejano|112,00",
+  "Catedral Reserva Tinto||189,00",
+  "## Sul-africano",
+  "Namaqua|Pinotage|149,00",
+  "Robertson|Pinotage|125,00",
+  "Robertson|Chenin Blanc|125,00",
+  "## Italiano",
+  "Lambrusco|Tinto frisante suave|89,00",
+  "Chianti D.O.C.G||135,00",
+  "Cantina Fiorentino|Primitivo de Salento|197,00",
+  "Primitivo di Manduria||245,00",
+  "Primitivo di Puglia||135,00",
+  "Why Not|Negroamaro / Primitivo|239,00",
+  "## Francês",
+  "Terres Calcaires|Cortês du Rhone|189,00",
+  "## Espanhol",
+  "Marques de la Vega|Tempranillo|109,00",
+  "Burgo Viejo Crianza||155,00",
+  "Identidad Rose|Bobal|115,00",
+  "Burgo Viejo Crianza|Garnacha|136,00",
+  "Ramon Bilbao Rose|Garnacha|143,90",
+  "## Uruguaio",
+  "Casa Grande|Tannat|169,00",
+  "## Chileno – Vinhos Tintos",
+  "Sombrero Magico|Cabernet Sauvignon|89,00",
+  "Merlisco Reserva|Merlot|145,00",
+  "Santa Maria de Apalta|Merlot|89,00",
+  "Caberisco Reserva|Cabernet Sauvignon|145,00",
+  "Valsierra|Carmenére|109,00",
+  "Yali Reserva|Pinot Noir|134,00",
+  "Faro|Cabernet Sauvignon|98,00",
+  "Faro|Carmenére|98,00",
+  "El Emisario Reserva|Pinot Noir|149,00",
+  "El Emisario Reserva|Cabernet Sauvignon|149,00",
+  "El Emisario Reserva|Carmenére|149,00",
+  "Casa Silva Santa Tierra|Cabernet Sauvignon|108,00",
+  "Casa Silva Santa Tierra|Carmenére|108,00",
+  "Cassillero del Diablo|Reserva Cabernet Sauvignon|105,00",
+  "Cassillero del Diablo|Reserva Merlot|105,00",
+  "Cassillero del Diablo|Reserva Carmenére|105,00",
+  "Carmen Insigne|Carmenére|118,00",
+  "Montes Alpha|Syhah|315,00",
+  "Montes Alpha|Cabernet Sauvignon|315,00",
+  "Punti Ferrer|Carmenére|105,00",
+  "Amayna|Pinot Noir|469,00",
+  "Hache Classic|Carmenére|105,00",
+  "Hache Classic|Cabernet Sauvignon|105,00",
+  "Terranoble Reserva|Carmenére|189,00",
+  "Hache Classic|Carmenére ou Cabernet · meia garrafa|78,00",
+  "## Chileno – Vinhos Brancos",
+  "Sombrero Magico|Sauvignon Blanc|89,00",
+  "Faro|Chardonay|98,00",
+  "El Emisario Reserva|Sauvignon Blanc|149,00",
+  "Punti Ferrer|Chardonay|105,00",
+  "Brisa|Chardonay · meia garrafa|67,00",
+  "## Argentino – Vinhos Tintos",
+  "Malma|Pinot Noir|109,00",
+  "Malma|Malbec|109,00",
+  "Sapo de Otro Pozo|Blend Tinto|179,00",
+  "Amalaya Tinto|Gran Corte|179,00",
+  "Altavid|Malbec|89,00",
+  "Uxmal|Malbec|145,00",
+  "Angento|Rosé|165,00",
+  "Padrillos Ernesto Catena|Pinot Noir|189,00",
+  "Uko Blend|Cabernet / Malbec|149,00",
+  "Vinas en Flor RN40|Malbec|169,00",
+  "Mister Uko|Cabernet Franc|186,00",
+  "Punto Final|Reserva Malbec|165,00",
+  "Aruma|Malbec|239,00",
+  "Conclave|Reserva Malbec|169,00",
+  "Finca Las Nubes|Malbec|99,00",
+  "Alamos Rose|Malbec|155,90",
+  "Alamos|Malbec|155,90",
+  "Amancaya|50% Malbec, 50% Cabernet Sauvignon|339,00",
+  "Finca La Linda|Cabernet Sauvignon|169,00",
+  "Finca La Linda|Malbec|169,00",
+  "Luigi Bosca|Reserva Cabernet Sauvignon|309,00",
+  "Luigi Bosca D.O.C|Reserva Malbec|391,00",
+  "Alma Negra|Ernesto Catena|319,00",
+  "D.V. Catena|Malbec-Malbec|346,00",
+  "Catena|Malbec|259,00",
+  "Alamos|Malbec · meia garrafa|99,00",
+  "## Argentino – Vinhos Brancos",
+  "Fortunatus Reserva|Chardonay|149,00",
+  "Alamos|Sauvignon Blanc / Chardonay|155,90",
+  "Catena|Chardonay|243,00",
+  "Finca La Linda|Chardonay|169,00"]}
+];
+
+/* Pratos que já têm foto no site (número = quantidade de imagens) */
+const FOTOS={
+ 'Entradas|Hackpeter':5,
+ 'Entradas|Cesta de Pães com 3 Patês':2,
+ 'Entradas|Polenta frita':1,
+ 'Saladas|Salada Mista':1,
+ 'Risoto|Risoto ao Funghi':2,
+ 'Nhoque Don Brunno|Molho Italiano':3,
+ 'Carnes|Filé à Parmegiana':2,
+ 'Carnes|Filé Mignon Picante':1,
+ 'Mar|Bacalhau à Don Brunno':2,
+ 'Mar|Camarão à Romanesca':1,
+ 'Sobremesas|Morango Don Brunno':3,
+ 'Sobremesas|Petit Gâteau':1,
+ 'Sobremesas|Sorvete com Cobertura de Chocolate':1
+};
+
+/* ---------------------------------------------------------------------- */
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const CAM='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l1.6-2.4h6.8L17 8h3v11H4z"/><circle cx="12" cy="13.2" r="3.4"/></svg>';
+const ORN='<svg class="orn" viewBox="0 0 200 14" aria-hidden="true"><line x1="0" y1="7" x2="80" y2="7"/><line x1="120" y1="7" x2="200" y2="7"/><path d="M80 7C88 0 96 0 100 7C104 14 112 14 120 7C112 0 104 0 100 7C96 14 88 14 80 7Z"/></svg>';
+
+/* preço: "98,90" ou "Jarra 35,00;Copo 14,90" → R$98,90 */
+function lerPreco(p){
+  if(!p)return {tipo:'nenhum'};
+  if(/^[\d.]+,\d{2}$/.test(p))return {tipo:'um',v:p};
+  const partes=p.split(';').map(x=>{const m=x.trim().match(/^(.*?)\s*([\d.]+,\d{2})$/);return m?{l:m[1],v:m[2]}:null}).filter(Boolean);
+  return {tipo:'varios',partes};
+}
+const precoTxt=it=>it.p.tipo==='um'?'R$'+it.p.v:it.p.tipo==='varios'?it.p.partes.map(x=>x.l+' R$'+x.v).join(' · '):'';
+const precoVarios=p=>'<span class="dm-mp">'+p.partes.map(x=>esc(x.l)+' R$'+x.v).join(' · ')+'</span>';
+
+const ITEMS={};                       // id -> dados do prato
+const nFotos=it=>Array.isArray(it.fotos)?it.fotos.length:(it.fotos||1);
+
+/* monta a foto (ou o campo destacado) do prato i */
+function midia(it,i){
+  const f=it.fotos,n=nFotos(it);
+  if(Array.isArray(f)) return '<div class="dmph"><img src="'+esc(f[i])+'" alt="'+esc(it.nome)+'"></div>';
+  return '<div class="dmph" role="img" aria-label="Espaço para foto: '+esc(it.nome)+'">'+(n>1?'<em>'+n+' fotos</em>':'')+CAM+'<b>Foto</b><span>'+esc(it.nome)+'</span></div>';
+}
+function quadro(it,i){
+  const n=nFotos(it);
+  return '<div class="fade">'+midia(it,i)+
+    '<div class="cap"><strong>'+esc(it.nome)+'</strong>'+(it.np?'':'<span>'+esc(precoTxt(it))+'</span>')+'</div>'+
+    (n>1?'<div class="nav"><button type="button" data-go="-1" aria-label="Foto anterior">‹</button><span>'+(i+1)+' / '+n+'</span><button type="button" data-go="1" aria-label="Próxima foto">›</button></div>':'')+
+  '</div>';
+}
+
+let html='',tabs='';
+SECOES.forEach(s=>{
+  tabs+='<li><a href="#'+s.id+'">'+esc(s.tab||s.t)+'</a></li>';
+  let n=0,corpo='';
+  {
+    let esq='';
+    if(s.massa){
+      const chips=s.massa.opcoes.map(o=>{const id=s.id+'-m'+(n++);ITEMS[id]={id,sec:s.id,nome:o,np:true,p:{tipo:'nenhum'},fotos:FOTOS[s.t+'|'+o]};
+        return '<button type="button" class="chip" data-id="'+id+'" aria-pressed="false">'+esc(o)+'</button>'}).join('');
+      esq+='<div class="pick"><h3>Escolha sua massa</h3>'+(s.massa.nota?'<p class="note">'+esc(s.massa.nota)+'</p>':'')+'<div class="chips">'+chips+'</div><div class="mob" hidden></div></div>'+
+           '<h3 class="dm-sub">Escolha seu molho</h3>';
+    }
+    const lis=s.itens.map(raw=>{
+      if(raw.startsWith('## '))return '<li class="gh"><h3>'+esc(raw.slice(3))+'</h3></li>';
+      const [a,d,p]=raw.split('|'),id=s.id+'-'+(n++),k=s.t+'|'+a,pr=lerPreco(p);
+      ITEMS[id]={id,sec:s.id,nome:a,desc:d,k,p:pr,fotos:FOTOS[k]};
+      return '<li><button type="button" class="dm-it" data-id="'+id+'" aria-pressed="false">'+
+        '<span class="nm">'+esc(a)+(pr.tipo==='um'?'<span class="sep">|</span>R$'+pr.v:'')+'</span>'+(d?'<span class="ds">'+esc(d)+'</span>':'')+
+        (pr.tipo==='varios'?precoVarios(pr):'')+
+        (FOTOS[k]?CAM.replace('<svg','<svg class="ci"'):'')+'</button><div class="mob" hidden></div></li>';
+    }).join('');
+    esq+='<ul class="its">'+lis+'</ul>';
+    corpo='<div class="grid"><div class="lista">'+esq+'</div><aside class="panel" aria-live="polite" aria-label="Foto do prato"></aside></div>';
+  }
+  html+='<section class="sec" id="'+s.id+'"><span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span>'+
+    '<header><h2>'+esc(s.t)+'</h2>'+ORN+(s.tag?'<span class="tag">'+esc(s.tag)+'</span>':'')+'</header>'+corpo+'</section>';
+});
+document.getElementById('menu').innerHTML=html;
+document.getElementById('tabs').innerHTML=tabs;
+
+/* ---------- interação (seções com foto) ---------- */
+const celular=()=>matchMedia('(max-width:820px)').matches;
+const estado={};                      // seção -> {id, i}
+
+function mostrar(secEl,id,abrir){
+  const it=ITEMS[id],st=estado[secEl.id]||(estado[secEl.id]={});
+  if(st.id!==id)st.i=0;
+  st.id=id;
+  secEl.querySelectorAll('[data-id]').forEach(b=>{const on=b.dataset.id===id;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});
+  secEl.querySelector('.panel').innerHTML=quadro(it,st.i);
+  /* celular: abre a foto logo abaixo do prato tocado */
+  secEl.querySelectorAll('.mob').forEach(m=>{m.hidden=true;m.innerHTML=''});
+  if(abrir&&celular()){
+    const b=secEl.querySelector('[data-id="'+id+'"]');
+    const m=b.classList.contains('chip')?b.closest('.pick').querySelector('.mob'):b.nextElementSibling;
+    m.innerHTML=quadro(it,st.i);m.hidden=false;
+  }
+}
+function virar(secEl,passo){
+  const st=estado[secEl.id],it=ITEMS[st.id],n=nFotos(it);
+  st.i=(st.i+passo+n)%n;
+  mostrar(secEl,st.id,true);
+}
+document.querySelectorAll('#dm .sec').forEach(sec=>{
+  /* painel começa no primeiro prato que tem foto (ou no primeiro item) */
+  const ids=[...sec.querySelectorAll('[data-id]')].map(b=>b.dataset.id);
+  mostrar(sec,ids.find(i=>ITEMS[i].fotos&&!ITEMS[i].np)||ids[0],false);
+  sec.addEventListener('mouseover',e=>{
+    if(celular()||!matchMedia('(hover:hover)').matches)return;
+    const b=e.target.closest('[data-id]');
+    if(b&&b.dataset.id!==estado[sec.id].id)mostrar(sec,b.dataset.id,false);
+  });
+  sec.addEventListener('click',e=>{
+    const g=e.target.closest('[data-go]');
+    if(g){virar(sec,+g.dataset.go);return}
+    const b=e.target.closest('[data-id]');
+    if(!b)return;
+    /* no celular, tocar de novo no mesmo prato fecha a foto */
+    if(celular()&&b.classList.contains('on')){mostrar(sec,b.dataset.id,false);b.classList.remove('on');b.setAttribute('aria-pressed',false);return}
+    mostrar(sec,b.dataset.id,true);
+  });
+});
+/* no celular nada começa aberto */
+if(celular())document.querySelectorAll('#dm [data-id].on').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed',false)});
+
+/* aba ativa ao rolar */
+const links=[...document.querySelectorAll('#tabs a')],bar=document.getElementById('tabs');
+const spy=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  links.forEach(a=>a.classList.toggle('on',a.hash==='#'+e.target.id));
+  const a=bar.querySelector('a.on');
+  if(a)bar.scrollTo({left:a.offsetLeft-bar.clientWidth/2+a.offsetWidth/2,behavior:'smooth'});
+}),{rootMargin:'-30% 0px -65% 0px'});
+document.querySelectorAll('#dm .sec').forEach(s=>spy.observe(s));
+</script>
 </body>
 </html>
